@@ -1,5 +1,6 @@
-/*	Arduino Nano Electric Ouija Board by LSSteele and GitHub CoPilot 02/16/2026
+/*	Arduino Nano Electric Mystical Ouija Board by LSSteele and GitHub CoPilot 02/16/2026
 	Modified: Planchette moves based on capacitance/resistance electrical impulses.
+	Added a trace-antenna to A7 to pick up any emf activity for random-seed movement.
 
   Compiles and Works!
   
@@ -7,7 +8,7 @@
 */
 
 #include <Wire.h>
-#include <Adafruit_GFX.h>
+#include <Adafruit_GFX.h> 
 #include <Adafruit_SSD1306.h>
 
 #define SCREEN_WIDTH 128
@@ -98,7 +99,7 @@ const unsigned char* epd_bitmap_allArray[1] = {
 
 const int touchPins[4] = {A0, A1, A2, A3}; // 4 membrane switches
 const int NUM_SENSORS = 4;
-const int threshold = 5; // Lowered threshold for more sensitivity
+const int threshold = 2; // Lowered threshold for more sensitivity
 
 int prevVals[NUM_SENSORS] = {0, 0, 0, 0}; // To store previous readings
 
@@ -109,8 +110,8 @@ const int bitmapX = (SCREEN_WIDTH - OUIJA_WIDTH) / 2;
 const int bitmapY = 0;
 
 // Movement parameters - adjust these for different behavior
-const int movementDivisor = 2; // Lower = more movement (was 4, now 2)
-const int minMovement = 1;      // Minimum pixels to move when threshold exceeded
+const int movementDivisor = 1; // Lower = more movement (was 4)
+const int minMovement = 4;      // Minimum pixels to move when threshold exceeded (was 2 now 4)
 
 void setup() {
   Serial.begin(9600); // For debugging
@@ -123,7 +124,7 @@ void setup() {
     prevVals[i] = analogRead(touchPins[i]);
   }
   
-  randomSeed(analogRead(A5)); // Use an unused analog pin for better randomness
+  randomSeed(analogRead(A7)); // to pick up on any emf activity
   
   Serial.println("Electric Ouija Board Initialized");
   Serial.println("Touch sensors on A0-A3");
